@@ -1,0 +1,71 @@
+{
+  "domains": {
+    "Artificial Intelligence": {
+      "core": ["Python", "TensorFlow", "PyTorch", "Scikit-learn"],
+      "advanced": ["GPT API", "LangChain", "Hugging Face Transformers", "ONNX"],
+      "deployment": ["Flask", "FastAPI", "Docker", "AWS SageMaker"]
+    },
+    "Computer Vision": {
+      "core": ["OpenCV", "Python", "NumPy"],
+      "models": ["YOLOv8", "ResNet", "EfficientNet", "U-Net", "MediaPipe"],
+      "frameworks": ["TensorFlow", "PyTorch", "TensorFlow Lite"],
+      "deployment": ["Raspberry Pi", "NVIDIA Jetson", "Edge AI"]
+    },
+    "Natural Language Processing": {
+      "core": ["Python", "NLTK", "spaCy"],
+      "models": ["BERT", "GPT", "T5", "mBERT", "Sentence Transformers"],
+      "frameworks": ["Hugging Face Transformers", "TensorFlow", "PyTorch"],
+      "tools": ["LangChain", "Elasticsearch", "Redis"]
+    },
+    "Healthcare": {
+      "core": ["Python", "Scikit-learn", "Pandas"],
+      "imaging": ["OpenCV", "U-Net", "ResNet", "DICOM"],
+      "nlp": ["BERT", "GPT", "spaCy"],
+      "platforms": ["Flask", "React", "PostgreSQL"]
+    },
+    "Agriculture": {
+      "core": ["Python", "TensorFlow", "Arduino"],
+      "sensors": ["Soil Moisture Sensor", "DHT11", "pH Sensor"],
+      "platforms": ["ESP32", "Raspberry Pi", "ThingSpeak"],
+      "imaging": ["Drone SDK", "Multispectral Camera", "OpenCV"]
+    },
+    "IoT": {
+      "core": ["Arduino", "ESP32", "Raspberry Pi"],
+      "protocols": ["MQTT", "HTTP", "BLE", "LoRa"],
+      "platforms": ["AWS IoT", "ThingSpeak", "Firebase"],
+      "tools": ["Node-RED", "Grafana", "InfluxDB"]
+    },
+    "Renewable Energy": {
+      "core": ["Python", "MATLAB", "Scikit-learn"],
+      "hardware": ["Solar Panels", "Wind Turbines", "SCADA"],
+      "ai": ["CNN", "LSTM", "Random Forest", "XGBoost"],
+      "monitoring": ["IoT Sensors", "Thermal Camera", "Drones"]
+    },
+    "Cybersecurity": {
+      "core": ["Python", "Wireshark", "Scapy"],
+      "ml": ["Random Forest", "XGBoost", "Deep Learning", "LSTM"],
+      "tools": ["Snort", "Suricata", "YARA Rules"],
+      "platforms": ["Elasticsearch", "Kibana", "Flask"]
+    },
+    "Education Technology": {
+      "core": ["React", "Node.js", "Python"],
+      "ai": ["Face Recognition", "NLP", "Recommendation Systems"],
+      "platforms": ["Firebase", "MongoDB", "PostgreSQL"],
+      "tools": ["WebRTC", "Socket.IO", "Canvas API"]
+    }
+  },
+  "technology_keywords": {
+    "deep learning": ["TensorFlow", "PyTorch", "Keras", "CNN", "LSTM", "GPU Computing"],
+    "computer vision": ["OpenCV", "YOLOv8", "MediaPipe", "PIL", "TensorFlow"],
+    "nlp": ["BERT", "GPT", "spaCy", "NLTK", "Hugging Face Transformers"],
+    "iot": ["Arduino", "ESP32", "Raspberry Pi", "MQTT", "Sensors"],
+    "web development": ["React", "Node.js", "Flask", "FastAPI", "PostgreSQL"],
+    "mobile": ["React Native", "Flutter", "TensorFlow Lite", "Firebase"],
+    "blockchain": ["Ethereum", "Solidity", "Web3.js", "IPFS"],
+    "cloud": ["AWS", "Google Cloud", "Docker", "Kubernetes"],
+    "data science": ["Pandas", "NumPy", "Matplotlib", "Scikit-learn", "Jupyter"],
+    "edge ai": ["TensorFlow Lite", "ONNX", "Raspberry Pi", "NVIDIA Jetson", "MobileNet"],
+    "drone": ["DJI SDK", "ArduPilot", "ROS", "Computer Vision", "GPS"],
+    "chatbot": ["Rasa", "Dialogflow", "LangChain", "GPT API", "WebSocket"]
+  }
+}
