@@ -1,7 +1,7 @@
 """
 Knowledge Graph - Builds a project knowledge graph using NetworkX.
 """
-import   as nx
+import networkx as nx
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from similarity_engine import compute_embedding
@@ -48,19 +48,24 @@ def build_knowledge_graph(projects: list, similarity_threshold: float = 0.5) -> 
 
     # ── Add SIMILAR_TO edges ──
     # Compute embeddings for all projects
+    valid_projects = []
     for p in projects:
-        if not p.get("embedding") or len(p["embedding"]) == 0:
-            p["embedding"] = compute_embedding(f"{p['title']}. {p['abstract']}")
+        emb = p.get("embedding")
+        if isinstance(emb, list) and len(emb) > 0:
+            valid_projects.append(p)
+            continue
+        p["embedding"] = compute_embedding(f"{p['title']}. {p['abstract']}")
+        valid_projects.append(p)
 
-    embeddings = np.array([p["embedding"] for p in projects])
+    embeddings = np.array([p["embedding"] for p in valid_projects])
     sim_matrix = cosine_similarity(embeddings)
 
-    for i in range(len(projects)):
-        for j in range(i + 1, len(projects)):
+    for i in range(len(valid_projects)):
+        for j in range(i + 1, len(valid_projects)):
             if sim_matrix[i][j] >= similarity_threshold:
                 G.add_edge(
-                    f"project_{projects[i]['id']}",
-                    f"project_{projects[j]['id']}",
+                    f"project_{valid_projects[i]['id']}",
+                    f"project_{valid_projects[j]['id']}",
                     relationship="SIMILAR_TO",
                     weight=round(float(sim_matrix[i][j]), 4),
                 )
