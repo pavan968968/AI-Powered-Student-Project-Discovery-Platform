@@ -2,12 +2,13 @@
 Technology Recommender - Suggests technologies for a project idea using Grok LLM or keyword matching.
 """
 import json
+import os
 import re
 from pathlib import Path
 
 # ── xAI Grok API Key ──
-XAI_API_KEY = "xai-yQ12gxd95LTt2TSRWYAB4vWjcx1lfvxa6aYyBVtCgG7simmMsT0YPBagnLdOxauNarqGHwiNp2s9SEi9"
-XAI_BASE_URL = "https://api.x.ai/v1"
+XAI_API_KEY = os.getenv("XAI_API_KEY", "")
+XAI_BASE_URL = os.getenv("XAI_BASE_URL", "https://api.x.ai/v1")
 
 _DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 

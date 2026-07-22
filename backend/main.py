@@ -3,16 +3,21 @@ ProjectDNA - FastAPI Backend
 AI-powered student project discovery platform.
 """
 import json
+import os
 import sys
 import traceback
 from pathlib import Path
 from fastapi import FastAPI, HTTPException
+
+from load_env import load_env_file
+
+load_env_file()
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # ── xAI Grok API Key ──
-XAI_API_KEY = "xai-yQ12gxd95LTt2TSRWYAB4vWjcx1lfvxa6aYyBVtCgG7simmMsT0YPBagnLdOxauNarqGHwiNp2s9SEi9"
-XAI_BASE_URL = "https://api.x.ai/v1"
+XAI_API_KEY = os.getenv("XAI_API_KEY", "")
+XAI_BASE_URL = os.getenv("XAI_BASE_URL", "https://api.x.ai/v1")
 
 # ── Data paths ──
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -108,16 +113,18 @@ def api_status():
 
     # Test Similarity Engine
     try:
-        from similarity_engine import SimilarityEngine
-        engine = SimilarityEngine()
-        status["similarity_engine"] = True
-    except Exception as e:
-        # Try alternate import
         try:
-            from similarity_engine import find_similar_projects
+            from .similarity_engine import SimilarityEngine
+            engine = SimilarityEngine()
             status["similarity_engine"] = True
-        except Exception as e2:
-            status["similarity_error"] = str(e2)
+        except Exception:
+            try:
+                from .similarity_engine import find_similar_projects
+                status["similarity_engine"] = True
+            except Exception as e2:
+                status["similarity_error"] = str(e2)
+    except Exception as e:
+        status["similarity_error"] = str(e)
 
     return status
 
@@ -157,7 +164,10 @@ def add_project(project: ProjectCreate):
 @app.post("/similar-projects")
 def similar_projects(input: SimilarProjectsInput):
     """Find similar projects using AI embeddings."""
-    from similarity_engine import find_similar_projects
+    try:
+        from .similarity_engine import find_similar_projects
+    except ImportError:  # pragma: no cover - fallback for direct execution
+        from similarity_engine import find_similar_projects
 
     projects = load_projects()
     results = find_similar_projects(input.query, projects, top_k=input.top_k)
@@ -171,7 +181,10 @@ def similar_projects(input: SimilarProjectsInput):
 @app.post("/idea-improvement")
 def idea_improvement(input: QueryInput):
     """Get AI-generated improvement suggestions."""
-    from idea_improver import improve_idea
+    try:
+        from .idea_improver import improve_idea
+    except ImportError:  # pragma: no cover - fallback for direct execution
+        from idea_improver import improve_idea
 
     result = improve_idea(input.query)
     return result
@@ -180,7 +193,10 @@ def idea_improvement(input: QueryInput):
 @app.post("/technology-recommendations")
 def technology_recommendations(input: QueryInput):
     """Get technology recommendations for a project idea."""
-    from tech_recommender import recommend_technologies
+    try:
+        from .tech_recommender import recommend_technologies
+    except ImportError:  # pragma: no cover - fallback for direct execution
+        from tech_recommender import recommend_technologies
 
     result = recommend_technologies(input.query)
     return result
@@ -189,7 +205,10 @@ def technology_recommendations(input: QueryInput):
 @app.post("/research-papers")
 def research_papers(input: QueryInput):
     """Get research paper recommendations."""
-    from paper_recommender import recommend_papers
+    try:
+        from .paper_recommender import recommend_papers
+    except ImportError:  # pragma: no cover - fallback for direct execution
+        from paper_recommender import recommend_papers
 
     result = recommend_papers(input.query)
     return result
@@ -198,7 +217,10 @@ def research_papers(input: QueryInput):
 @app.get("/knowledge-graph")
 def knowledge_graph():
     """Get knowledge graph data for visualization."""
-    from knowledge_graph import build_knowledge_graph
+    try:
+        from .knowledge_graph import build_knowledge_graph
+    except ImportError:  # pragma: no cover - fallback for direct execution
+        from knowledge_graph import build_knowledge_graph
 
     projects = load_projects()
     graph_data = build_knowledge_graph(projects)
@@ -212,7 +234,10 @@ def knowledge_graph():
 @app.get("/timeline/{project_id}")
 def timeline(project_id: int):
     """Get idea evolution timeline for a project."""
-    from timeline_engine import get_timeline
+    try:
+        from .timeline_engine import get_timeline
+    except ImportError:  # pragma: no cover - fallback for direct execution
+        from timeline_engine import get_timeline
 
     projects = load_projects()
     result = get_timeline(project_id, projects)

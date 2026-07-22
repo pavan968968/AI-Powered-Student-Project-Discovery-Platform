@@ -4,7 +4,11 @@ Knowledge Graph - Builds a project knowledge graph using NetworkX.
 import networkx as nx
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from similarity_engine import compute_embedding
+
+try:
+    from .similarity_engine import compute_embedding
+except ImportError:  # pragma: no cover - fallback for direct execution
+    from similarity_engine import compute_embedding
 
 
 def build_knowledge_graph(projects: list, similarity_threshold: float = 0.5) -> dict:

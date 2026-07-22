@@ -1,23 +1,49 @@
 """
 Similarity Engine - Computes embeddings and finds similar projects using Sentence Transformers.
+Falls back to a lightweight keyword-based embedding when the model package is unavailable.
 """
+import math
+import re
+
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Lazy-load the model to avoid slow startup
 _model = None
 
+
 def _get_model():
     global _model
     if _model is None:
-        from sentence_transformers import SentenceTransformer
+        try:
+            from sentence_transformers import SentenceTransformer
+        except Exception:
+            return None
         _model = SentenceTransformer("all-MiniLM-L6-v2")
     return _model
+
+
+def _fallback_embedding(text: str) -> list[float]:
+    """Generate a lightweight bag-of-words embedding when the ML model is unavailable."""
+    tokens = re.findall(r"\w+", text.lower())
+    counts = {}
+    for token in tokens:
+        counts[token] = counts.get(token, 0) + 1
+
+    if not counts:
+        return [0.0]
+
+    values = [float(count) for count in counts.values()]
+    norm = math.sqrt(sum(v * v for v in values)) or 1.0
+    return [value / norm for value in values]
 
 
 def compute_embedding(text: str) -> list:
     """Convert text into a dense vector embedding."""
     model = _get_model()
+    if model is None:
+        return _fallback_embedding(text)
+
     embedding = model.encode(text, show_progress_bar=False)
     return embedding.tolist()
 
@@ -25,6 +51,9 @@ def compute_embedding(text: str) -> list:
 def compute_embeddings_batch(texts: list[str]) -> list[list]:
     """Compute embeddings for a batch of texts."""
     model = _get_model()
+    if model is None:
+        return [_fallback_embedding(text) for text in texts]
+
     embeddings = model.encode(texts, show_progress_bar=False, batch_size=32)
     return embeddings.tolist()
 

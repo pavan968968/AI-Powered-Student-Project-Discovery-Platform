@@ -3,7 +3,11 @@ Timeline Engine - Shows how project ideas evolve over time by grouping similar p
 """
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from similarity_engine import compute_embedding
+
+try:
+    from .similarity_engine import compute_embedding
+except ImportError:  # pragma: no cover - fallback for direct execution
+    from similarity_engine import compute_embedding
 
 
 def get_timeline(project_id: int, projects: list, similarity_threshold: float = 0.45) -> dict:
